@@ -3,12 +3,21 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage[many]{tcolorbox}
 
 \usepackage{src/package/Listings}
 
 \NewDocumentCommand\TODO{m}{\footnote{\textcolor{red}{TODO: #1}}}
 
 \def\dif{\mathop{}\!\mathrm{d}}
+
+\newtcolorbox{exampleBox}{
+    sharpish corners, % better drop shadow
+    boxrule = 0pt,
+    toprule = 4.5pt, % top rule weight
+    enhanced,
+    fuzzy shadow = {0pt}{-2pt}{-0.5pt}{0.5pt}{black!35} % {xshift}{yshift}{offset}{step}{options} 
+}
 
 \setCJKmainfont[Path=../fonts/,BoldFont=SourceHanSerifCN-Bold.otf,ItalicFont=SourceHanSerifCN-Bold.otf]{SourceHanSerifCN-Regular.otf}
 \setCJKsansfont[Path=../fonts/,BoldFont=SourceHanSansCN-Bold.otf]{SourceHanSansCN-Regular.otf}
@@ -66,7 +75,7 @@ cargo run --bin 00_normal
 \end{lstlisting}
 
 \subsection{伊藤引理}
-\label{ItosLemma}
+\label{title:ItosLemma}
 
 [TODO]
 
@@ -142,7 +151,7 @@ $$
 \dif{S(t)} = \mu S(t) \dif{t} + \sigma S(t) \dif{B(t)}
 $$
 
-通过伊藤引理 \ref{ItosLemma}，我们可以得到：
+通过伊藤引理 \ref{title:ItosLemma}，我们可以得到：
 
 $$
 S(t) = S_0 \exp\left(\left(\mu - {\sigma^2 \over 2}\right)t + \sigma B(t)\right)
@@ -189,5 +198,106 @@ cargo run --bin 02_geo_brownian_motion
     \caption{几何布朗运动}
     \label{fig:geoBrownianMotion}
 \end{figure}
+
+\chapter{金融经济学}
+
+\section{标的属性}
+
+\subsection{股票市盈率}
+
+市盈率是市价盈利比率（price earnings ratio，P/E）的简称。
+
+我们在 \ref{title:DDM} 节中讨论了 DDM 模型，它指出了股票的价格取决于其预期分红。而企业往往在盈利后才会有分红。
+所以为了给股票估值，那么我们往往会研究这个股票估值指标，即市盈率。它的值是股票价格和每股盈利的比值。
+而每股盈利则是公司总盈利除以公司的总股份数。
+
+注意到公司不会将所有盈利都用来分红，公司往往会将一部分盈利拿来用以分红，那么将这个比例记为 $k$，第 $t$ 期的每股分红 $D_t$ 和每股盈利 $E_t$ 有
+
+$$
+E_t = kD_t
+$$
+
+将其带入到 \ref{title:DDM} 节中的戈登股利增长模型中有
+
+$$
+{S_0 \over E_1} = {k \over r - g}
+$$
+
+这里的左式即为市盈率。即市盈率取决于分红率、贴现率和盈利增速这三个变量。
+
+这说明了即使一个企业的每股盈利较高，但是如果企业以较低分红率分红的话，投资者也不会愿意投资这个企业。
+同样，盈利增速也是一个非常重要的因素，它即使发生的是一点点变化，也会大幅度影响 P/E 的值。
+
+\begin{exampleBox}
+如果我们说一个股票的 P/E 为 10，而每股盈利为 10 元的话，那么可以说这个公司的股价在理论上应该为 100 元。
+如果我们说因为某种原因，导致了预期的盈利增速 $g$ 发生了变化（比如政策倾斜），即使这个公司在短期内每股盈利不变，但是也会导致市盈率大幅上涨，从而导致价格也大幅上涨。
+比如如果 $r = 20\%$，而 $g = 16\%$ 上涨到了 $g' = 18\%$，这个 $2\%$ 的上涨会导致 P/E 翻倍，最后导致股票价格也翻倍。
+\end{exampleBox}
+
+\begin{exampleBox}
+和上一个例子一样，我们假设 $S_0 = 100$，$E_1 = 10$，$k = 40\%$，$g = 16\%$ 以及 $r = 20\%$，我们来计算投资者在第 0 期买入，到第 1 期卖出得到的回报率。
+可以知道投资回报率为
+
+$$
+{D_1 + S_1 \over S_0} - 1
+$$
+
+即一期得到的分红以及股票价格之和相比一开始的股票价格的涨幅。
+我们知道 $D_1 = k E_1 = 4$，而 $S_1 = {D_2 \over r - g} = {D_1 (1 + g) \over r - g} = 116$，所以有
+
+$$
+{4 + 116 \over 100} - 1 = 20\% = r
+$$
+
+可以知道市场的投资回报率为 $r = 20\%$。这个不难证明。所以贴现率即为投资者所能接受且理论上能获得的回报率（如果实际产生的回报率高于贴现率，那么对这个股票的需求就会上涨，导致价格上涨，进而拉低回报率，最后达到均衡）。
+\end{exampleBox}
+
+在实践中，我们一般使用滚动市盈率（trailing P/E）来表示市盈率，即市盈率 TTM，其中 TTM 表示 trailing twelve months，即根据过去的 12 个月来计算出来的市盈率。
+在实践中上市公司会一年发布四次财报，所以实践中我们会用过去 4 个财报的盈利数字之和作为市盈率的分母
+\footnote{理论上来说，市盈率应该使用未来一年的盈利来作为分母，但是很可惜截止目前还没有会时空穿越的金融奇才。}，所以和市盈率 P/E 表示的 $S_0 / E_1$ 不同，P/E TTM 表示的是 $S_0 / E_0$。
+而对于高成长的公司，往往 $E_1$ 和 $E_0$ 之间的差距较大，这个时候我们需要预测未来的十二个月的盈利。我们使用预测的盈利来计算市盈率，这个时候我们就得到了前瞻市盈率（forward P/E）。
+
+除了市盈率，我们还有市净率（price to book ratio，P/B）等指标，表示每股股价和每股净资产。
+
+\section{金融模型和理论}
+
+\subsection{股利贴现模型}
+\label{title:DDM}
+
+股利贴现模型（dividend discount model），也就是 DDM，可以用如下的表达式来完成表达
+
+$$
+S_0 = {D_1 + S_1 \over 1 + r} = \sum_{t=1}^{\infty} {D_t \over (1 + r)^t} + \lim_{t \to \infty} {P_t \over (1 + r)^t}
+$$
+
+这里的 $S_t$ 即表示在 $t$ 期时候的价格，而 $r$ 表示贴现率，而 $D_t$ 表示在 $t$ 期时候的分红。
+可以看到，因为我们假设市场是无套利的，所以当前股票的价格理论上应该是分红和除红利价格之和，除以 $1 + r$ 之后的价格。
+将这个过程无限延伸下去，我们就可以得到上面的公式。
+
+我们对其设置一个截断性条件，即
+
+$$
+\lim_{t \to \infty} {P_t \over (1 + r)^t} = 0
+$$
+
+那么有
+
+$$
+S_0 = \sum_{t=1}^{\infty} {D_t \over (1 + r)^t}
+$$
+
+而我们为了简单起见，可以假设 $D_t = D_0 (1 + g)^t$，那么有
+
+$$
+S_0 = {D_1 \over r - g}
+$$
+
+这个方程被称为戈登模型。
+
+\section{参考书目}
+
+\begin{itemize}
+    \item 《金融经济学二十五讲》，徐高，中国人民大学出版社；
+\end{itemize}
 
 \end{document}
