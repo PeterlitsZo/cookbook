@@ -42,6 +42,203 @@
 
 \section{统计和概率学}
 
+\subsection{随机变量}
+
+随机变量是一个定义在样本空间中的实值函数。比如我们令 $Y$ 表示投掷三枚硬币正面朝上的次数，那么 $Y$ 就是一个随机变量，有
+\begin{align*}
+    P\left\{Y = 0\right\} & = 1 / 8 \\
+    P\left\{Y = 1\right\} & = 3 / 8 \\
+    P\left\{Y = 2\right\} & = 3 / 8 \\
+    P\left\{Y = 3\right\} & = 1 / 8
+\end{align*}
+
+对于随机变量 $X$，我们定义它的累积分布函数（简称分布函数）为
+\[
+    F(x) = P\left\{ X \le x \right\} \quad -\infty < x < \infty
+\]
+
+根据随机变量的取值情况，我们可以将随机变量分为离散型随机变量和连续型随机变量。
+
+我们可以使用概率分布列来表示离散型随机变量。随机变量 $X$ 的概率分布列 $p(a)$ 被定义为
+\[
+    p(a) = P\left\{ X = a \right\}
+\]
+
+如果 $X$ 的可能取值构成集合 $\{x_1, x_2, \ldots\}$，那么 $\sum_{i = 1}^\infty p(x_i) = 1$。而分布函数因此可以表示为
+\[
+    F(a) = \sum_{x \le a} p(x)
+\]
+
+因为是离散的，所以对应的分布函数 $F(a)$ 是一个阶梯函数，在 $x_i$ 处有跳跃，跃值为 $p(x_i)$。
+
+\subsection{期望}
+
+对于离散型随机变量 $X$，它的期望记为 $E[X]$，定义为
+\[
+    E[X] = \sum_{x:\ p(x) > 0} x p(x)
+\]
+
+即 $X$ 所有可能取值的一个加权平均。即我们对 $X$ 进行若干次实验后，得到的值的平均值会趋向于 $E[X]$。
+
+进一步地，我们能计算出离散型随机变量的函数 $g(X)$ 的期望。我们可以按照离散型随机变量的期望的定义来计算，即我们先计算出 $g(X)$ 的概率分布列，然后再计算出它的期望。
+
+\begin{exampleBox}
+    比如对于离散型随机变量 $X$ 有概率分布列 $p_X( \cdot )$ 如下
+
+    \[
+        p_X(-1) = 0.2 \qquad p_X(0) = 0.5 \qquad p_X(1) = 0.3
+    \]
+
+    那么 $X$ 的函数 $g(X) = X^2$ 有概率分布列 $p_{g(X)}( \cdot )$ 如下
+
+    \[
+        p_{g(X)}(0) = 0.5 \qquad p_{g(X)}(1) = 0.5
+    \]
+
+    容易得到 $E[X] = 0.1$，而 $E[X^2] = 0.5$。从这里我们就可以看出来，$(E[X])^2 \ne E[X^2]$。
+\end{exampleBox}
+
+我们可以更规范地说，对于 $E[g(X)]$，我们有
+\[
+    E[g(X)] = \sum_{i} g(x_i) p(x_i)
+\]
+
+\subsection{方差和标准差}
+
+对于随机变量 $X$ 而言，我们定义方差 $\textrm{Var}(X)$ 为
+\[
+    \textrm{Var}(X) = E\left[ (X - E[X])^2 \right]
+\]
+
+但是我们可以对其进行推导，从而得到一个等价的，但是很有意思的表达，即
+\[
+    \textrm{Var}(X) = E[X^2] - (E[X])^2
+\]
+这个推导是很简单的。我们还很容易能够发现，根据方差的定义，方差一定大于等于 $0$，所以能说，对于随机变量，它的平方的期望一定大于等于期望的平方。
+
+对于 $X$ 而言，我们定义它的标准差为
+\[
+    \textrm{SD}(X) = \sqrt{\textrm{Var}(X)}
+\]
+
+\subsection{伯努利随机变量和二项随机变量}
+
+对于随机变量 $X$，如果它的分布列满足
+\begin{align*}
+    p(0) & = P\left\{ X = 0 \right\} = 1 - p \\
+    p(1) & = P\left\{ X = 1 \right\} = p
+\end{align*}
+其中 $p \in (0, 1)$，那么我们说 $X$ 为伯努利随机变量。
+
+我们假设我们做了 $n$ 次实验，其中每一次实验结果都可以看成一个独立的伯努利随机变量（实验成功，我们则将其记为 $1$，那么实验成功的概率为 $p(1) = p$），那么最后成功的次数也是一个随机变量，我们记它为参数为 $(n, p)$ 的二项随机变量 $X$，它的分布列为
+\[
+    p(i) = {n \choose i} p^i (1 - p)^{n - i} \qquad i = 0, 1, \cdots, n
+\]
+
+伯努利随机变量是参数为 $(1, p)$ 的特殊二项随机变量。
+
+对于二项随机变量 $X$ 而言，不让认为它的参数为 $(n, p)$，那么有期望为
+\begin{align*}
+    E[X] & = \sum_{i = 0}^{n} i p(i) = \sum_{i = 1}^{n} i p(i) \\
+         & = \sum_{i = 1}^{n} i {n \choose i} p^i (1 - p)^{n - i} \\
+         & = \sum_{i = 1}^{n} i {n! \over i! (n - i)!} p^i (1 - p)^{n - i} \\
+         & = np \sum_{i = 1}^{n} {(n - 1)! \over (i - 1)! \left[(n - 1) - (i - 1)\right]!} p^{i - 1} (1 - p)^{(n - 1) - (i - 1)} \\
+         & = np \sum_{j = 0}^{m} {m! \over j! (m - j)!} p^j (1 - p)^{m - j} \\
+         & = np
+\end{align*}
+这里我们知道 $\sum_{j = 0}^{m} {m! \over j! (m - j)!} p^j (1 - p)^{m - j} = 1$，所以能够知道对于参数为 $(n, p)$ 的二项随机变量 $X$ 而言，$E[X] = np$。
+
+我们可以进一步地解随机变量的次方对应的随机变量 $X^k$ 的期望，有
+\begin{align*}
+    E[X^k] & = \sum_{i = 1}^{n} i^k {n \choose i} p^i (1 - p)^{n - i} \\
+           & = \sum_{i = 1}^{n} i^{k - 1} n {n - 1 \choose i - 1} p^i (1 - p)^{n - i} \qquad \textrm{这里有 $i {n \choose i} = n {n - 1 \choose i - 1}$} \\
+           & = np \sum_{i = 1}^{n} i^{k - 1} {n - 1 \choose i - 1} p^{i - 1} (1 - p)^{n - i} \\
+           & = np \sum_{j = 0}^{n - 1} (j + 1)^{k - 1} {n - 1 \choose j} p^j (1 - p)^{(n - 1) - j} \\
+           & = np E[(Y + 1)^{k - 1}]
+\end{align*}
+其中 $Y$ 为一个二项随机变量，它的参数为 $(n - 1, p)$。那么有
+\begin{align*}
+    E[X^2] & = np E[Y + 1] \\
+           & = np [(n - 1)p + 1]
+\end{align*}
+带入到方差的公式中，有
+\begin{align*}
+    \textrm{Var}(X) = E[X^2] - (E[X])^2 = np [(n - 1)p + 1] - (np)^2 = np (1 - p)
+\end{align*}
+
+给出一个重要结论，对于参数为 $(n, p)$ 的二项随机变量 $X$，有
+\begin{center}
+    \fbox{$ E[X] = np \qquad \textrm{Var}(X) = np (1 - p) $}
+\end{center}
+
+此外，我们需要意识到，如果 $X$ 是参数 $(n, p)$ 对应的二项随机变量，那么对于 $k$ 从 $0$ 到 $n$，其 $P\{ X = k \}$ 会先单调递增，然后再单调递减。当 $k$ 为
+\[
+    \left\lfloor (n + 1) p \right\rfloor
+\]
+时，$P\{X = k\}$ 取得最大值。
+
+\subsection{泊松随机变量}
+
+对于随机变量 $X$，如果满足
+\[
+    p(i) = P\{X = i\} = e^{-\lambda} {\lambda^i \over i!} \qquad i = 0, 1, 2, \ldots
+\]
+那么我们说 $X$ 是服从参数 $\lambda$ 的泊松随机变量。当 $n$ 足够大，然后 $p$ 又足够小使得 $np$ 保持适当的大小的时候，那么参数为 $(n, p)$ 的二项随机变量可以近似地看为服从 $\lambda = np$ 的泊松随机变量（反过来也成立）。也就是说，对于满足这个条件的二项随机变量 $X$ 有
+\begin{align*}
+    P\{X = i\} & = {n \choose i} p^i (1 - p)^{n - i} = {n! \over i! (n - i)!} \left( {\lambda \over n} \right)^i \left( 1 - {\lambda \over n} \right)^{n - i} \\
+               & = {n (n - 1) \cdots (n - i + 1) \over i!} {\lambda^i \over n^i} {(1 - \lambda / n)^n \over (1 - \lambda / n)^i}
+\end{align*}
+对于充分大的 $n$ 和适当的 $\lambda$，有\footnote{书中没有指出来，但是我看这第三个表达式的含义恐怕需要 $i$ 也不能太大？似乎因为 $np$ 本身保持适当的值，所以导致 $i$ 取 $np$ 附近的值时，$p(i)$ 的值才会比较大的样子，似乎 $i$ 过大的情况下，$p(i)$ 就会约等于 $0$ 了。}
+\[
+    \left(1 - {\lambda \over n}\right)^n \approx e^{-\lambda}, \qquad n (n - 1) \cdots (n - i + 1) \approx n^i, \qquad \left(1 - {\lambda \over n}\right)^i \approx 1
+\]
+那么有
+\[
+    P\{X = i\} = {\lambda^i \over i!} e^{-\lambda}
+\]
+
+举例来说，某页印刷错的字母个数 $X$ 即可以视为泊松随机变量。每个字母印刷错误的概率很小，为 $p$，该页的字母个数为 $n$，那么 $X$ 的参数 $\lambda$ 满足 $\lambda = np$。
+
+我们知道，对于二项随机变量而言，期望和方差分别为 $np$ 和 $np(1 - p)$。因为泊松随机变量可以视为特殊情况下的二项随机变量，所以泊松分布的期望和方差可以带入得到 $\lambda$ 和 $\lambda$（因为 $p$ 很小，所以我们认为 $1 - p$ 可以视为 $1$）。
+
+\subsection{几何随机变量}
+
+考虑独立重复实验中，反复实验，直到实验成功的次数 $X$ 为一个随机变量，那么有
+\[
+    P\{ X = n\} = (1 - p)^{n - 1} p \qquad n = 1, 2, \cdots
+\]
+那么我们说 $X$ 是服从参数 $p$ 的几何随机变量。几何随机变量的期望为
+\[
+    E[X] = {1 \over p}
+\]
+方差为
+\[
+    \textrm{Var}(X) = {1 - p \over p^2}
+\]
+
+\subsection{概率密度函数}
+
+对于随机变量 $X$，我们说它的概率密度函数 $f_X(x)$ 可以用来描述 $X$ 随机变量能够取某个值的概率大小的函数。也就是说，对于 $\forall -\infty < a < b < \infty$，我们有
+
+$$
+P\left[ a < X < b \right] = \int_{a}^{b} f_X(x) \dif{x}
+$$
+
+即 $X$ 的取值在 $(a, b)$ 之间的概率正好为概率密度函数在这个区间的积分。
+
+\subsection{协方差}
+
+我们使用协方差来描述随机变量之间的相关程度。我们定义 $X$ 和 $Y$ 这两个随机变量的协方差为
+
+$$
+\textrm{cov}(X, Y) = E\left[ ( X - E[X] ) ( Y - E[Y] ) \right]
+$$
+
+如果我们说两个随机变量 $X$ 和 $Y$ 正相关的时候，
+那么当 $X$ 大于 $E[X]$ 的时候，一般来说，$Y$ 也大概率大于 $E[Y]$，反之亦然。
+带入式子可以看出 $\textrm{cov}(X, Y)$ 是大于 $0$ 的。
+所以我们可以反过来用协方差来量化地定义两个随机变量之间的相关性。
+
 \subsection{正态分布}
 
 我们说一个随机变量 $X$ 服从正态分布，那么我们记为 $X \sim N(\mu, \sigma^2)$。
