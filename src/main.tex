@@ -44,13 +44,22 @@
 \tableofcontents
 \newpage
 
-\chapter{数学}
+
+
+
+
+\part{数学}
 
 虽然我的确想要把所有笔记都记录在 Obsidian 中，但是数学相关的内容用 Obsidian 写起来还是太麻烦了。还是挪到这里吧。
 
-\section{统计和概率学}
 
-\subsection{随机变量}
+
+
+\chapter{统计和概率学}
+
+
+
+\section{随机变量}
 
 随机变量是一个定义在样本空间中的实值函数。比如我们令 $Y$ 表示投掷三枚硬币正面朝上的次数，那么 $Y$ 就是一个随机变量，有
 \begin{align*}
@@ -80,9 +89,11 @@
 因为是离散的，所以对应的分布函数 $F(a)$ 是一个阶梯函数，在 $x_i$ 处有跳跃，跃值为 $p(x_i)$。
 
 
-\subsection{期望}
 
-\subsubsection{离散型随机变量的期望}
+\section{期望}
+
+
+\subsection{离散型随机变量的期望}
 
 对于离散型随机变量 $X$，它的期望记为 $E[X]$，定义为
 \[
@@ -114,7 +125,8 @@
     E[g(X)] = \sum_{i} g(x_i) p(x_i)
 \]
 
-\subsubsection{随机变量和的期望}
+
+\subsection{随机变量和的期望}
 
 不妨假设样本空间 $S$ 是一个有限的或者可数无限的集合。
 给定一个随机变量 $X$，则当 $s \in S$ 时，令 $X(s)$ 表示此时随机变量 $X$ 的取值，而 $Y$ 同理，即 $Z = X + Y$ 同样是随机变量，而且 $Z(s) = X(s) + Y(s)$ 成立。
@@ -146,7 +158,8 @@
 即，随机变量的和的期望即为随机变量的期望的和。
 
 
-\subsection{方差和标准差}
+
+\section{方差和标准差}
 
 对于随机变量 $X$ 而言，我们定义方差 $\textrm{Var}(X)$ 为
 \[
@@ -163,6 +176,11 @@
 \[
     \textrm{SD}(X) = \sqrt{\textrm{Var}(X)}
 \]
+
+
+
+\section{离散型随机变量}
+
 
 \subsection{伯努利随机变量和二项随机变量}
 
@@ -219,6 +237,7 @@
     \left\lfloor (n + 1) p \right\rfloor
 \]
 时，$P\{X = k\}$ 取得最大值。
+
 
 \subsection{泊松随机变量}
 
@@ -303,7 +322,7 @@
 \]
 
 
-\subsection{$\zeta$ 分布}
+\subsection[zeta 分布]{$\zeta$ 分布}
 
 如果一个随机变量有如下的分布列：
 \[
@@ -325,7 +344,9 @@ $$
 
 即 $X$ 的取值在 $(a, b)$ 之间的概率正好为概率密度函数在这个区间的积分。
 
-\subsection{协方差}
+
+
+\section{协方差}
 
 我们使用协方差来描述随机变量之间的相关程度。我们定义 $X$ 和 $Y$ 这两个随机变量的协方差为
 
@@ -338,7 +359,8 @@ $$
 带入式子可以看出 $\textrm{cov}(X, Y)$ 是大于 $0$ 的。
 所以我们可以反过来用协方差来量化地定义两个随机变量之间的相关性。
 
-\subsection{正态分布}
+
+\section{正态分布}
 
 我们说一个随机变量 $X$ 服从正态分布，那么我们记为 $X \sim N(\mu, \sigma^2)$。
 
@@ -373,12 +395,14 @@ println!("{} is from a N(0, 1) distribution", v);
 cargo run --bin 00_normal
 \end{lstlisting}
 
-\subsection{伊藤引理}
+
+\section{伊藤引理}
 \label{title:ItosLemma}
 
 [TODO]
 
-\subsection{标准布朗运动}
+
+\section{标准布朗运动}
 
 我们这么定义标准布朗运动，对于定义在非负实数（时域）$t$ 上的连续随机过程 $\{B_t, t \ge 0\}$，满足以下条件：
 
@@ -432,7 +456,9 @@ cargo run --bin 01_std_brownian_motion
     \label{fig:stdBrownianMotion}
 \end{figure}
 
-\subsection[几何布朗运动]{几何布朗运动\protect\footnotemark}
+
+
+\section[几何布朗运动]{几何布朗运动\protect\footnotemark}
 \footnotetext{见 \url{https://zhuanlan.zhihu.com/p/38293827}。}
 
 我们可以在标准布朗运动 $B(t)$ 的基础上定义几何布朗运动。在定义之前，我们先定义有漂移的布朗运动 $X(t)$，它有：
@@ -593,7 +619,9 @@ $$
 
 这个方程被称为戈登模型。
 
-\subsection{均值-方差模型}
+
+
+\section{均值-方差模型}
 \label{title:E-sigma-model}
 
 在金融资产这个主题中，债卷，尤其是国债，是一种如果我们在当前买入，就一定能知道未来能得到多少收益的金融资产。对于这种未来收益给定了的资产，和股票等金融资产不同，我们可以说它的基本没有所谓的 “不确定性”。我们可以使用波动性来量化金融资产未来价格的 “不确定性”，即我们可以说国债的波动率是 0。
@@ -677,7 +705,9 @@ CML）。而资产市场线与双曲线的切点就是\emph{市场组合}，一�
 这说明了一个事情，即理性的投资者，无论其偏好如何，他总是会使用市场组合的形式来持有有风险资产。投资者的风险偏好只会影响他们分配在无风险资产和市场组合的比例上。
 
 
-\section{参考书目}
+
+
+\chapter{参考书目}
 
 \begin{itemize}
     \item 《金融经济学二十五讲》，徐高，中国人民大学出版社；
