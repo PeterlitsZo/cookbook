@@ -5,8 +5,9 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage[many]{tcolorbox}
-% \usepackage[left=0.65in, right=0.65in, top=0.95in, bottom=0.95in]{geometry}
-\usepackage[inner=1in, outer=1.25in]{geometry}
+\usepackage[left=1in, right=1in, top=1in, bottom=1in]{geometry}
+% \usepackage[inner=1in, outer=1.25in]{geometry}
+\usepackage{titlesec}
 
 \usepackage{src/package/Listings}
 
@@ -25,6 +26,13 @@
 \setCJKmainfont[Path=../fonts/,BoldFont=SourceHanSerifCN-Bold.otf,ItalicFont=SourceHanSerifCN-Bold.otf]{SourceHanSerifCN-Regular.otf}
 \setCJKsansfont[Path=../fonts/,BoldFont=SourceHanSansCN-Bold.otf]{SourceHanSansCN-Regular.otf}
 \setCJKmonofont[Path=../fonts/]{SourceHanSansCN-Regular.otf}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \title{Cookbook}
 \author{周泓余\thanks{PeterlitsZo}}
@@ -71,7 +79,10 @@
 
 因为是离散的，所以对应的分布函数 $F(a)$ 是一个阶梯函数，在 $x_i$ 处有跳跃，跃值为 $p(x_i)$。
 
+
 \subsection{期望}
+
+\subsubsection{离散型随机变量的期望}
 
 对于离散型随机变量 $X$，它的期望记为 $E[X]$，定义为
 \[
@@ -102,6 +113,38 @@
 \[
     E[g(X)] = \sum_{i} g(x_i) p(x_i)
 \]
+
+\subsubsection{随机变量和的期望}
+
+不妨假设样本空间 $S$ 是一个有限的或者可数无限的集合。
+给定一个随机变量 $X$，则当 $s \in S$ 时，令 $X(s)$ 表示此时随机变量 $X$ 的取值，而 $Y$ 同理，即 $Z = X + Y$ 同样是随机变量，而且 $Z(s) = X(s) + Y(s)$ 成立。
+
+举例来说，我们假设随机试验由抛掷 5 次硬币组成，那么这里的一个样本 $s \in S$ 可能为 $(h, t, h, t, h)$。
+而 $X$ 表示前三次抛掷中正面朝上的次数，那么 $X(s) = 2$，而 $Y$ 表示后两次抛掷中正面朝上的次数，那么 $Y(s) = 1$，而 $Z(s) = X(s) + Y(s) = 3$。
+
+令 $p(s) = P(\{ s \})$，因为任意事件 $A$ 可以写为有限个或可数无限个互不相容的事件 $s$ 的和，则
+\[
+    P(A) = \sum_{s \in A} p(s)
+\]
+
+假设随机变量 $X$ 的不同取值为 $x_i ( i \ge 1 )$。对于每一个 $i$，令 $S_i$ 表示 $X$ 等于 $x_i$ 时的事件，即 $S_i = \{ s: X(s) = x_i \}$，那么
+\begin{align*}
+    E[X] & = \sum_{i} x_i P\{ X = x_i \} = \sum_{i} x_i P(S_i) = \sum_{i} x_i \sum_{s \in S_i} p(s) = \sum_{i} \sum_{s \in S_i} x_i p(s) \\
+         & = \sum_i \sum_{s \in S_i} X(s) p(s) = \sum_{s \in S} X(s) p(s)
+\end{align*}
+即 $E[X]$ 有
+\[
+    E[X] = \sum_{s \in S} X(s) p(s)
+\]
+
+对于随机变量 $X_1, X_2, \cdots, X_n$，记 $Z = \sum_{i = 1}^n X_i$，那么有为
+\begin{align*}
+    E[Z] & = \sum_{s \in S} Z(s) p(s) = \sum_{s \in S} \left( X_1(s) + X_2(s) + \cdots + X_n(s) \right) p(s) \\
+         & = \sum_{s \in S} X_1(s) p(s) + \sum_{s \in S} X_2(s) p(s) + \cdots + \sum_{s \in S} X_n(s) p(s) \\
+         & = E[X_1] + E[X_2] + \cdots + E[X_n]
+\end{align*}
+即，随机变量的和的期望即为随机变量的期望的和。
+
 
 \subsection{方差和标准差}
 
@@ -201,9 +244,10 @@
 
 我们知道，对于二项随机变量而言，期望和方差分别为 $np$ 和 $np(1 - p)$。因为泊松随机变量可以视为特殊情况下的二项随机变量，所以泊松分布的期望和方差可以带入得到 $\lambda$ 和 $\lambda$（因为 $p$ 很小，所以我们认为 $1 - p$ 可以视为 $1$）。
 
+
 \subsection{几何随机变量}
 
-考虑独立重复实验中，反复实验，直到实验成功的次数 $X$ 为一个随机变量，那么有
+考虑独立重复实验中，反复实验，直到实验成功的实验总次数 $X$ 为一个随机变量，那么有
 \[
     P\{ X = n\} = (1 - p)^{n - 1} p \qquad n = 1, 2, \cdots
 \]
@@ -215,6 +259,61 @@
 \[
     \textrm{Var}(X) = {1 - p \over p^2}
 \]
+
+
+\subsection{负二项随机变量}
+
+负二项随机变量是几何随机变量的一个延伸。考虑独立重复实验中，反复实验，直到实验成功 $r$ 次的实验总次数 $X$ 为一个随机变量，那么有
+\[
+    P\{ X = n \} = \left( { n - 1 \over r - 1 } \right) (1 - p)^{n - r} p^r
+\]
+我们称 $X$ 是服从参数 $(r, p)$ 的负二项随机变量。
+
+负二项随机变量的期望为
+\[
+    E[X] = {r \over p}
+\]
+方差为
+\[
+    \textrm{Var}(X) = {r(1 - p) \over p^2}
+\]
+
+
+\subsection{超几何随机变量}
+
+考虑一个坛子中有 $N$ 个球，其中 $m$ 个白球，$N - m$ 个黑球，从中随机无放回地抽取 $n$ 个球，设随机变量 $X$ 为抽到的白球个数，那么我们说 $X$ 是服从参数 $(n, N, m)$ 的超几何随机变量。那么有
+\[
+    P\{ X = i \} = {{m \choose i} {N - m \choose n - i} \over {N \choose n}} \qquad i = 0, 1, \cdots, n
+\]
+这个的表达式是直观的。注，我们定义了 $k < 0$ 或者 $r < k$ 时 $r \choose k$ 等于 $0$。
+
+当 $N$ 和 $m$ 相对 $n$ 而言很大的时候，我们可以认为这个时候是否放回对于结果来说是没有影响的。也就是说，超几何随机变量可以近似地看成二项随机变量。
+
+超几何随机变量的期望为
+\[
+    E[X] = {nm \over N}
+\]
+方差为
+\[
+    \textrm{Var}(X) = {nm \over N}\left[ {(n - 1)(m - 1) \over N - 1} + 1 - {nm \over N} \right]
+\]
+如果令 $p = m / N$，那么有为
+\[
+    E[X] = np \qquad \textrm{Var}(X) = np(1 - p){1- {n - 1 \over N - 1}}
+\]
+
+
+\subsection{$\zeta$ 分布}
+
+如果一个随机变量有如下的分布列：
+\[
+    P\{X = k\} = {C \over k^{\alpha + 1}} \qquad k = 1, 2, \cdots
+\]
+其中 $\alpha > 0$ 为参数，则称该随机变量为服从 $\zeta$ 分布（或者说 Zipf 分布）。而因为概率之和必然等于 1，所以有：
+\[
+    C = \left[ \sum_{k = 1}^\infty \left( {1 \over k} \right)^{\alpha + 1} \right]^{-1}
+\]
+
 
 \subsection{概率密度函数}
 
