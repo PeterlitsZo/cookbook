@@ -16,7 +16,7 @@ $arrow(A B)$。向量有方向和长度，没有固定的起始点。即两个�
 
 我们可以称长度为 1 的向量为单位向量。对于向量 $arrow(a)$，那么我们可以得到它对应
 的单位向量 $hat(a) = frac(arrow(a), vectorLen(arrow(a)), style: "horizontal")$。
-我们可以使用单位向量来表示其方向。  
+我们可以使用单位向量来表示其方向。
 
 我们可以让向量相加，表示为 $arrow(a) + arrow(b)$。
 
@@ -92,7 +92,10 @@ $arrow(C A)$ 和 $arrow(C P)$ 的叉乘方向来判断点 $P$ 在三角形内部
 
 $
   vectorLen(arrow(u)) = vectorLen(arrow(v)) = vectorLen(arrow(w)) = 1 \
-  arrow(u) dot.c arrow(v) = arrow(v) dot.c arrow(w) = arrow(w) dot.c arrow(u) = 0 \
+  arrow(u) dot.c arrow(v)
+    = arrow(v) dot.c arrow(w)
+    = arrow(w) dot.c arrow(u)
+    = 0 \
   arrow(w) = arrow(u) times arrow(v)
 $
 
@@ -137,3 +140,63 @@ $
 
 有了矩阵的知识，那么我们可以将 $arrow(a) dot.c arrow(b)$ 表示为 $arrow(a)^T
 arrow(b)$，然后将 $arrow(a) times arrow(b)$ 表示为 $A^* arrow(b)$。
+
+== 离散数学
+
+主要参考： https://www.zhihu.com/column/c_1373405812786839552
+
+=== 群的基本概念
+
+==== 半群
+
+设 $chevron.l S, * chevron.r$，若 $*$ 满足结合律，则 $chevron.l S, * chevron.r$
+为*半群*。
+
+设半群 $chevron.l S, * chevron.r$，若 $*$ 满足交换律，则 $chevron.l S, *
+chevron.r$ 为*可交换半群*。
+
+设半群 $chevron.l M, * chevron.r$，若 $*$ 有幺元，则 $chevron.l M, * chevron.r$
+为*独异点*（或*含幺半群*或*拟群*）。
+
+设半群 $chevron.l S, * chevron.r$，存在 $g in S$，使得 $S = { g^n | n in ZZ^+
+}$，我们就称其为*循环半群*，其中 $g$ 为*生成元*。
+
+设半群 $chevron.l S, * chevron.r$，存在 $G subset.eq S$，使得 $S = chevron.l G
+chevron.r$，则我们称 $G$ 为 $S$ 的*生成集合*。其中 $chevron.l G chevron.r$ 表示
+有限个 $G$ 中的元素经 $*$ 生成的元素集合。
+
+==== 群
+
+如果 $chevron.l G, * chevron.r$ 是独异点且每个元素均有逆元，则我们称其为*群*，记
+为 $G$。
+
+如果群 $chevron.l G, * chevron.r$ 中的 $*$ 是可交换的，则我们称其为可交换群，或
+者阿贝尔群。
+
+群 $G$ 的基数称为群 $G$ 的*阶*。
+
+==== 环
+
+设 $chevron.l R, +, * chevron.r$ 为代数系统，其中 $chevron.l R, + chevron.r$ 为
+交换群，而 $chevron.l R, * chevron.r$ 为半群，同时 $*$ 关于 $+$ 适合分配律，则我
+们称 $chevron.l R, +, * chevron.r$ 为一个*环*。我们称 $+$ 为加法，而 $*$ 为乘
+法，那么加法的幺元被称为 $0$。
+
+如果环 $chevron.l R, +, * chevron.r$ 中，$chevron.l R, * chevron.r$ 是可交换半
+群，则我们称其为可交换环。
+
+如果环 $chevron.l R, +, * chevron.r$ 中，$chevron.l R, * chevron.r$ 为独异点，则
+我们称其为含幺环。
+
+如果环 $chevron.l R, +, * chevron.r$ 中，对于任意 $a in R$ 和 $b in R$，如果 $a
+* b = 0$，则必定能推导出 $a = 0 or b = 0$，那么我们称其为无零因子环。
+
+如果环 $chevron.l R, +, * chevron.r$ 同时是交换环，含幺环、无零因子环，则我们称
+其为整环。
+
+==== 域
+
+如果环 $chevron.l R, +, * chevron.r$，其中 $R$ 至少含有两个元素，其中 $R^* = R -
+{ 0 }$，如果对于任意的 $a$，$a in R^*$ 能推导出 $a^(-1) in R$，则我们称其为域。
+
+如果域只包含有限个元素，我们将其称为有限域或者伽罗瓦域。元素个数称为它的阶。
